@@ -31,7 +31,7 @@ namespace Dna
                 exceptionMessage = Environment.NewLine + exception;
 
             // Format the message string
-            return $"{message} [{Path.GetFileName(filePath)} > {origin}() > Line {lineNumber}]";
+            return $"{message} [{Path.GetFileName(filePath)} > {origin}() > Line {lineNumber}]{exceptionMessage}";
         }
     }
 }
