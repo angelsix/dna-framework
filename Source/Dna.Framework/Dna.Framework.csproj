@@ -3,6 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Dna</RootNamespace>
+    <Authors>Luke Malpass</Authors>
+    <Company>AngelSix</Company>
+    <Description>A cross-platform base framework useful for all projects that use .Net Core</Description>
+    <PackageProjectUrl>https://github.com/angelsix/dna-framework</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/angelsix/dna-framework</RepositoryUrl>
+    <PackageTags>dna framework angelsix luke malpass web core cross platform</PackageTags>
+    <PackageReleaseNotes>A cross-platform base framework useful for all projects that use .Net Core</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
