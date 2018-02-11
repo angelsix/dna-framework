@@ -10,6 +10,16 @@
     <RepositoryUrl>https://github.com/angelsix/dna-framework</RepositoryUrl>
     <PackageTags>dna framework angelsix luke malpass web core cross platform</PackageTags>
     <PackageReleaseNotes>A cross-platform base framework useful for all projects that use .Net Core</PackageReleaseNotes>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\Dna.Framework.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
