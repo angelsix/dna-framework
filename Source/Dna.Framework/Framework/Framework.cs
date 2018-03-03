@@ -65,6 +65,17 @@ namespace Dna
             Logger.LogCriticalSource($"Dna Framework started in {Environment.Configuration}...");
         }
 
+        /// <summary>
+        /// Shortcut to Framework.Provider.GetService to get an injected service of type <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T">The type of service to get</typeparam>
+        /// <returns></returns>
+        public static T Service<T>()
+        {
+            // Use provider to get the service
+            return Provider.GetService<T>();
+        }
+
         #endregion
     }
 }
