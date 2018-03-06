@@ -28,7 +28,7 @@ namespace Dna
                 // Set base path for Json files as the startup location of the application
                 .SetBasePath(Directory.GetCurrentDirectory())
                 // Add application settings json files
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{construction.Environment.Configuration}.json", optional: true, reloadOnChange: true);
 
             // Let custom configuration happen
@@ -48,11 +48,11 @@ namespace Dna
         #endregion
 
         /// <summary>
-        /// Injects all of the default services used by Dna.Framework for a quicker and cleaner setup
+        /// Injects all of the default services used by Dna Framework for a quicker and cleaner setup
         /// </summary>
         /// <param name="construction">The construction</param>
         /// <returns></returns>
-        public static FrameworkConstruction UseDefaultServices(this FrameworkConstruction construction)
+        public static FrameworkConstruction AddDefaultServices(this FrameworkConstruction construction)
         {
             // Add exception handler
             construction.AddDefaultExceptionHandler();

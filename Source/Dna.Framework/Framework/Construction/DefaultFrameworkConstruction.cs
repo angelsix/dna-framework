@@ -16,7 +16,7 @@
             // Configure...
             this.Configure()
                 // And add default services
-                .UseDefaultServices();
+                .AddDefaultServices();
         }
 
         #endregion

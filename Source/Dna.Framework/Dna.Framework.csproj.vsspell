@@ -6,13 +6,17 @@
   <SelectedLanguages />
   <InheritIgnoredWords>True</InheritIgnoredWords>
   <IgnoredWords>
+    <Ignore>async</Ignore>
+    <Ignore>deserialize</Ignore>
     <Ignore>dna</Ignore>
+    <Ignore>func</Ignore>
     <Ignore>http</Ignore>
     <Ignore>json</Ignore>
     <Ignore>serializer</Ignore>
+    <Ignore>tcs</Ignore>
     <Ignore>unhandled</Ignore>
     <Ignore>xml</Ignore>
-    <Ignore>deserialize</Ignore>
+    <Ignore>trackable</Ignore>
   </IgnoredWords>
   <InheritExclusionExpressions>True</InheritExclusionExpressions>
   <InheritIgnoredFilePatterns>True</InheritIgnoredFilePatterns>
