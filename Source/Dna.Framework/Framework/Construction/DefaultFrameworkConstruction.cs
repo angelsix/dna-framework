@@ -1,4 +1,7 @@
-﻿namespace Dna
+﻿using Microsoft.Extensions.Configuration;
+using System;
+
+namespace Dna
 {
     /// <summary>
     /// Creates a default framework construction containing all 
@@ -11,10 +14,10 @@
         /// <summary>
         /// Default constructor
         /// </summary>
-        public DefaultFrameworkConstruction()
+        public DefaultFrameworkConstruction(Action<IConfigurationBuilder> configure = null)
         {
             // Configure...
-            this.Configure()
+            this.Configure(configure)
                 // And add default services
                 .AddDefaultServices();
         }

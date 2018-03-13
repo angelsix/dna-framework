@@ -56,13 +56,15 @@ namespace Dna
         /// start our application
         /// </summary>
         /// <param name="construction">The construction</param>
-        public static void Build(this FrameworkConstruction construction)
+        /// <param name="logStarted">Specifies if the Dna Framework Started message should be logged</param>
+        public static void Build(this FrameworkConstruction construction, bool logStarted = true)
         {
             // Build the service provider
             ServiceProvider = construction.Services.BuildServiceProvider();
 
             // Log the startup complete
-            Logger.LogCriticalSource($"Dna Framework started in {Environment.Configuration}...");
+            if (logStarted)
+                Logger.LogCriticalSource($"Dna Framework started in {Environment.Configuration}...");
         }
 
         /// <summary>
