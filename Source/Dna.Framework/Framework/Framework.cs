@@ -38,6 +38,11 @@ namespace Dna
         public static ILogger Logger => Provider.GetService<ILogger>();
 
         /// <summary>
+        /// Gets the logger factory for creating loggers
+        /// </summary>
+        public static ILoggerFactory LoggerFactory => Provider.GetService<ILoggerFactory>();
+
+        /// <summary>
         /// Gets the framework environment
         /// </summary>
         public static FrameworkEnvironment Environment => Provider.GetService<FrameworkEnvironment>();
@@ -56,13 +61,18 @@ namespace Dna
         /// start our application
         /// </summary>
         /// <param name="construction">The construction</param>
-        public static void Build(this FrameworkConstruction construction)
+        /// <param name="logStarted">Specifies if the Dna Framework Started message should be logged</param>
+        public static FrameworkConstruction Build(this FrameworkConstruction construction, bool logStarted = true)
         {
             // Build the service provider
             ServiceProvider = construction.Services.BuildServiceProvider();
 
             // Log the startup complete
-            Logger.LogCriticalSource($"Dna Framework started in {Environment.Configuration}...");
+            if (logStarted)
+                Logger.LogCriticalSource($"Dna Framework started in {Environment.Configuration}...");
+
+            // Return construction for calling ConfigureServices after, when required
+            return construction;
         }
 
         /// <summary>
