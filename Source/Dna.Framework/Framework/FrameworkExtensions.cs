@@ -24,12 +24,20 @@ namespace Dna
             // Create our configuration sources
             var configurationBuilder = new ConfigurationBuilder()
                 // Add environment variables
-                .AddEnvironmentVariables()
+                .AddEnvironmentVariables();
+
+            // If we are not on a mobile platform...
+            if (!construction.Environment.IsMobile)
+            {
+                // Add file based configuration
+
                 // Set base path for Json files as the startup location of the application
-                .SetBasePath(Directory.GetCurrentDirectory())
+                configurationBuilder.SetBasePath(Directory.GetCurrentDirectory());
+
                 // Add application settings json files
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{construction.Environment.Configuration}.json", optional: true, reloadOnChange: true);
+                configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                configurationBuilder.AddJsonFile($"appsettings.{construction.Environment.Configuration}.json", optional: true, reloadOnChange: true);
+            }
 
             // Let custom configuration happen
             configure?.Invoke(configurationBuilder);

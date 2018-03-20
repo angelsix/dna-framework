@@ -15,7 +15,7 @@ namespace Dna
     ///     will be provided with a cancellation token to monitor for when it should "stop"
     /// </para>
     /// </summary>
-    public class SingleTaskWorker
+    public abstract class SingleTaskWorker
     {
         #region Protected Members
 
@@ -37,6 +37,11 @@ namespace Dna
         /// A unique ID for locking the starting and stopping calls of this class
         /// </summary>
         public string LockingKey { get; set; } = nameof(SingleTaskWorker) + Guid.NewGuid().ToString("N");
+
+        /// <summary>
+        /// The name that identifies this worker (used in unhandled exception logs to report source of an issue)
+        /// </summary>
+        public abstract string WorkerName { get; }
 
         /// <summary>
         /// Indicates if the service is shutting down and should finish what it's doing and save any important information/progress
@@ -111,7 +116,7 @@ namespace Dna
                 Framework.Logger.LogTraceSource($"Starting worker process...");
 
                 // Start the main task
-                Task.Run(RunWorkerTaskAsync);
+                RunWorkerTaskNoAwait();
 
                 // We have started a new task
                 return true;
@@ -156,24 +161,38 @@ namespace Dna
         /// Runs the worker task and sets the IsRunning to false once complete
         /// </summary>
         /// <returns>Returns once the worker task has completed</returns>
-        protected async Task RunWorkerTaskAsync()
+        protected void RunWorkerTaskNoAwait()
         {
-            try
+            // IMPORTANT: Not awaiting a Task leads to swallowed exceptions
+            //            so we try/catch the entire task and report any unhandled
+            //            exceptions to the log
+            Task.Run(async () =>
             {
-                // Log something
-                Framework.Logger.LogTraceSource($"Worker task started...");
+                try
+                {
+                    // Log something
+                    Framework.Logger.LogTraceSource($"Worker task started...");
 
-                // Run given task
-                await WorkerTaskAsync(mCancellationToken.Token);
-            }
-            finally
-            {
-                // Log it
-                Framework.Logger.LogTraceSource($"Worker task finished");
+                    // Run given task
+                    await WorkerTaskAsync(mCancellationToken.Token);
+                }
+                // Swallow expected and normal task canceled exceptions
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
+                {
+                    // Unhandled exception
+                    // Log it
+                    Framework.Logger.LogCriticalSource($"Unhandled exception in single task worker '{WorkerName}'. {ex}");
+                }
+                finally
+                {
+                    // Log it
+                    Framework.Logger.LogTraceSource($"Worker task finished");
 
-                // Set finished event informing waiters we are finished working
-                mWorkerFinishedEvent.Set();
-            }
+                    // Set finished event informing waiters we are finished working
+                    mWorkerFinishedEvent.Set();
+                }
+            });
         }
 
         /// <summary>
