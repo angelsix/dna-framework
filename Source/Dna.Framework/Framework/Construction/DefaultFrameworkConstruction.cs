@@ -21,6 +21,10 @@ namespace Dna
     ///             .Build();
     ///             
     ///     // Configure services
+    ///     // Sets up environment variables based on the calling assembly
+    ///     Framework.SetEnvironment();
+    ///     
+    ///     // Custom service extensions
     ///     framework.UseYourService1(options => options.Something = true );
     ///     framework.UseYourService2();
     /// </code>
