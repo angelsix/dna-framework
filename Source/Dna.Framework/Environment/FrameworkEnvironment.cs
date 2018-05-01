@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace Dna
 {
@@ -10,9 +12,9 @@ namespace Dna
         #region Public Properties
 
         /// <summary>
-        /// True if we are in a development environment
+        /// True if we are in a development (specifically, debuggable) environment
         /// </summary>
-        public bool IsDevelopment { get; set; } = true;
+        public bool IsDevelopment => Assembly.GetEntryAssembly()?.GetCustomAttribute<DebuggableAttribute>()?.IsJITTrackingEnabled == true;
 
         /// <summary>
         /// The configuration of the environment, either Development or Production
@@ -35,9 +37,7 @@ namespace Dna
         /// </summary>
         public FrameworkEnvironment()
         {
-#if RELEASE
-            IsDevelopment = false;
-#endif
+
         }
 
         #endregion
