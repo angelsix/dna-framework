@@ -7,6 +7,20 @@ namespace Dna
     /// <summary>
     /// The main entry point into the Dna Framework library
     /// </summary>
+    /// <remarks>
+    /// <para>
+    ///     To use Dna.Framework you need to create a new <see cref="FrameworkConstruction"/>
+    ///     such as <see cref="DefaultFrameworkConstruction"/> and then add your services
+    ///     then finally <see cref="Framework.Build(FrameworkConstruction)"/>. For example:
+    /// </para>
+    /// <code>
+    ///     // Create the default framework and build it
+    ///     new DefaultFrameworkConstruction().Build();
+    ///     
+    ///     // Set Framework.Environment up based on this assemblies environment
+    ///     Framework.SetEnvironment();
+    /// </code>
+    /// </remarks>
     public static class Framework
     {
         #region Public Properties
@@ -76,6 +90,7 @@ namespace Dna
             // Return construction for chaining
             return Construction;
         }
+
 
         /// <summary>
         /// The initial call to setting up and using the Dna Framework.
