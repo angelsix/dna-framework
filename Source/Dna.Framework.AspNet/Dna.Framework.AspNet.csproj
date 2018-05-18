@@ -11,6 +11,7 @@
     <PackageTags>dna framework asp net angelsix luke malpass web core cross platform</PackageTags>
     <PackageReleaseNotes>The ASP.Net Core easy-integration support for Dna.Framework, the cross-platform base framework useful for all projects that use .Net Core</PackageReleaseNotes>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>1.0.6</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
