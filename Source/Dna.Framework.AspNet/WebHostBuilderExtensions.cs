@@ -25,7 +25,9 @@ namespace Dna.AspNet
                 // be used by DnaFramework 
                 services.AddDnaFramework()
                         // Add configuration
-                        .AddConfiguration(context.Configuration);
+                        .AddConfiguration(context.Configuration)
+                        // Add default services
+                        .AddDefaultServices();
 
                 // Fire off construction configuration
                 configure?.Invoke(Framework.Construction);
