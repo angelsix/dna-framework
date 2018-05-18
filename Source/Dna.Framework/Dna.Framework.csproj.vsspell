@@ -14,9 +14,10 @@
     <Ignore>json</Ignore>
     <Ignore>serializer</Ignore>
     <Ignore>tcs</Ignore>
+    <Ignore>trackable</Ignore>
     <Ignore>unhandled</Ignore>
     <Ignore>xml</Ignore>
-    <Ignore>trackable</Ignore>
+    <Ignore>debuggable</Ignore>
   </IgnoredWords>
   <InheritExclusionExpressions>True</InheritExclusionExpressions>
   <InheritIgnoredFilePatterns>True</InheritIgnoredFilePatterns>
