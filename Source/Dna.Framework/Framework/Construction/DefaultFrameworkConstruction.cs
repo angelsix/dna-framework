@@ -10,19 +10,16 @@ namespace Dna
     /// <example>
     /// 
     /// <para>
-    ///     This is the expected setup code for building a Dna Framework Construction
+    ///     This is an example setup code for building a Dna Framework Construction
     /// </para>
     /// 
     /// <code>
+    /// 
     ///     // Build the framework adding any required services
-    ///     var framework = new DefaultFrameworkConstruction()
+    ///     Framework.Construct&lt;DefaultFrameworkConstruction&gt;()
     ///             .AddFileLogger()
-    ///             .AddAutoUploader()
     ///             .Build();
     ///             
-    ///     // Configure services
-    ///     framework.UseYourService1(options => options.Something = true );
-    ///     framework.UseYourService2();
     /// </code>
     /// 
     /// </example>
@@ -33,10 +30,21 @@ namespace Dna
         /// <summary>
         /// Default constructor
         /// </summary>
-        public DefaultFrameworkConstruction(Action<IConfigurationBuilder> configure = null)
+        public DefaultFrameworkConstruction()
         {
             // Configure...
-            this.Configure(configure)
+            this.AddDefaultConfiguration()
+                // And add default services
+                .AddDefaultServices();
+        }
+
+        /// <summary>
+        /// Constructor with configuration options
+        /// </summary>
+        public DefaultFrameworkConstruction(Action<IConfigurationBuilder> configure)
+        {
+            // Configure...
+            this.AddDefaultConfiguration(configure)
                 // And add default services
                 .AddDefaultServices();
         }

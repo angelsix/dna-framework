@@ -1,4 +1,5 @@
 ﻿using System;
+using static Dna.FrameworkDI;
 
 namespace Dna
 {
@@ -15,7 +16,7 @@ namespace Dna
         {
             // Log it
             // TODO: Localization of strings
-            Framework.Logger.LogCriticalSource("Unhandled exception occurred", exception: exception);
+            Logger.LogCriticalSource("Unhandled exception occurred", exception: exception);
         }
     }
 }

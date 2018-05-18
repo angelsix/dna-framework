@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dna.Framework.AspNet", "Dna.Framework.AspNet\Dna.Framework.AspNet.csproj", "{660CC260-7BF2-4875-AA4B-712A822DFA02}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{660CC260-7BF2-4875-AA4B-712A822DFA02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{660CC260-7BF2-4875-AA4B-712A822DFA02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{660CC260-7BF2-4875-AA4B-712A822DFA02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{660CC260-7BF2-4875-AA4B-712A822DFA02}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C1E05BD9-9968-4D30-BC1D-09C1FC553846}
+	EndGlobalSection
+EndGlobal

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using static Dna.FrameworkDI;
 
 namespace Dna
 {
@@ -91,7 +92,7 @@ namespace Dna
         public Task<bool> StartAsync()
         {
             // Log it
-            Framework.Logger.LogTraceSource($"Start requested...");
+            Logger.LogTraceSource($"Start requested...");
 
             // Make sure only one start or stop call runs at a time...
             return AsyncLock.LockResultAsync(LockingKey, () =>
@@ -100,7 +101,7 @@ namespace Dna
                 if (IsRunning)
                 {
                     // Log it
-                    Framework.Logger.LogTraceSource($"Already started. Ignoring.");
+                    Logger.LogTraceSource($"Already started. Ignoring.");
 
                     // We are not starting a new task
                     return false;
@@ -113,7 +114,7 @@ namespace Dna
                 IsRunning = true;
 
                 // Log it
-                Framework.Logger.LogTraceSource($"Starting worker process...");
+                Logger.LogTraceSource($"Starting worker process...");
 
                 // Start the main task
                 RunWorkerTaskNoAwait();
@@ -136,14 +137,14 @@ namespace Dna
                 if (!IsRunning)
                 {
                     // Log it
-                    Framework.Logger.LogTraceSource($"Already stopped. Ignoring.");
+                    Logger.LogTraceSource($"Already stopped. Ignoring.");
 
                     // Ignore
                     return;
                 }
 
                 // Log it
-                Framework.Logger.LogTraceSource($"Stop requested...");
+                Logger.LogTraceSource($"Stop requested...");
 
                 // Flag main worker to shut down
                 mCancellationToken.Cancel();
@@ -171,7 +172,7 @@ namespace Dna
                 try
                 {
                     // Log something
-                    Framework.Logger.LogTraceSource($"Worker task started...");
+                    Logger.LogTraceSource($"Worker task started...");
 
                     // Run given task
                     await WorkerTaskAsync(mCancellationToken.Token);
@@ -182,12 +183,12 @@ namespace Dna
                 {
                     // Unhandled exception
                     // Log it
-                    Framework.Logger.LogCriticalSource($"Unhandled exception in single task worker '{WorkerName}'. {ex}");
+                    Logger.LogCriticalSource($"Unhandled exception in single task worker '{WorkerName}'. {ex}");
                 }
                 finally
                 {
                     // Log it
-                    Framework.Logger.LogTraceSource($"Worker task finished");
+                    Logger.LogTraceSource($"Worker task finished");
 
                     // Set finished event informing waiters we are finished working
                     mWorkerFinishedEvent.Set();

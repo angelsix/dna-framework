@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 namespace Dna
 {
     /// <summary>
-    /// Details about the current system environment
+    /// Default implementation about the current framework environment
     /// </summary>
-    public class FrameworkEnvironment
+    public class DefaultFrameworkEnvironment : IFrameworkEnvironment
     {
         #region Public Properties
 
@@ -35,7 +35,7 @@ namespace Dna
         /// <summary>
         /// Default constructor
         /// </summary>
-        public FrameworkEnvironment()
+        public DefaultFrameworkEnvironment()
         {
 
         }
