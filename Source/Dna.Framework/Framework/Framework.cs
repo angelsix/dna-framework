@@ -11,14 +11,13 @@ namespace Dna
     /// <para>
     ///     To use Dna.Framework you need to create a new <see cref="FrameworkConstruction"/>
     ///     such as <see cref="DefaultFrameworkConstruction"/> and then add your services
-    ///     then finally <see cref="Framework.Build(FrameworkConstruction)"/>. For example:
+    ///     then finally <see cref="Framework.Build(FrameworkConstruction, bool)"/>. For example:
     /// </para>
     /// <code>
+    /// 
     ///     // Create the default framework and build it
-    ///     new DefaultFrameworkConstruction().Build();
+    ///     Framework.Construct&lt;DefaultFrameworkConstruction&gt;().Build();
     ///     
-    ///     // Set Framework.Environment up based on this assemblies environment
-    ///     Framework.SetEnvironment();
     /// </code>
     /// </remarks>
     public static class Framework
