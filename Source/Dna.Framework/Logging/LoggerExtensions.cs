@@ -26,7 +26,7 @@ namespace Dna
             [CallerMemberName] string origin = "",
             [CallerFilePath] string filePath = "",
             [CallerLineNumber] int lineNumber = 0,
-            params object[] args) => logger.Log(LogLevel.Critical, eventId, args.Prepend(origin, filePath, lineNumber, message), exception, LoggerSourceFormatter.Format);
+            params object[] args) => logger?.Log(LogLevel.Critical, eventId, args.Prepend(origin, filePath, lineNumber, message), exception, LoggerSourceFormatter.Format);
 
         /// <summary>
         /// Logs a verbose trace message, including the source of the log
@@ -45,7 +45,7 @@ namespace Dna
             [CallerMemberName] string origin = "",
             [CallerFilePath] string filePath = "",
             [CallerLineNumber] int lineNumber = 0,
-            params object[] args) => logger.Log(LogLevel.Trace, eventId, args.Prepend(origin, filePath, lineNumber, message), exception, LoggerSourceFormatter.Format);
+            params object[] args) => logger?.Log(LogLevel.Trace, eventId, args.Prepend(origin, filePath, lineNumber, message), exception, LoggerSourceFormatter.Format);
 
         /// <summary>
         /// Logs a debug message, including the source of the log
@@ -64,7 +64,7 @@ namespace Dna
             [CallerMemberName] string origin = "",
             [CallerFilePath] string filePath = "",
             [CallerLineNumber] int lineNumber = 0,
-            params object[] args) => logger.Log(LogLevel.Debug, eventId, args.Prepend(origin, filePath, lineNumber, message), exception, LoggerSourceFormatter.Format);
+            params object[] args) => logger?.Log(LogLevel.Debug, eventId, args.Prepend(origin, filePath, lineNumber, message), exception, LoggerSourceFormatter.Format);
 
         /// <summary>
         /// Logs an error message, including the source of the log
@@ -83,7 +83,7 @@ namespace Dna
             [CallerMemberName] string origin = "",
             [CallerFilePath] string filePath = "",
             [CallerLineNumber] int lineNumber = 0,
-            params object[] args) => logger.Log(LogLevel.Error, eventId, args.Prepend(origin, filePath, lineNumber, message), exception, LoggerSourceFormatter.Format);
+            params object[] args) => logger?.Log(LogLevel.Error, eventId, args.Prepend(origin, filePath, lineNumber, message), exception, LoggerSourceFormatter.Format);
        
         /// <summary>
         /// Logs an informative message, including the source of the log
@@ -102,7 +102,7 @@ namespace Dna
             [CallerMemberName] string origin = "",
             [CallerFilePath] string filePath = "",
             [CallerLineNumber] int lineNumber = 0,
-            params object[] args) => logger.Log(LogLevel.Information, eventId, args.Prepend(origin, filePath, lineNumber, message), exception, LoggerSourceFormatter.Format);
+            params object[] args) => logger?.Log(LogLevel.Information, eventId, args.Prepend(origin, filePath, lineNumber, message), exception, LoggerSourceFormatter.Format);
 
         /// <summary>
         /// Logs a warning message, including the source of the log
@@ -121,6 +121,6 @@ namespace Dna
             [CallerMemberName] string origin = "",
             [CallerFilePath] string filePath = "",
             [CallerLineNumber] int lineNumber = 0,
-            params object[] args) => logger.Log(LogLevel.Warning, eventId, args.Prepend(origin, filePath, lineNumber, message), exception, LoggerSourceFormatter.Format);
+            params object[] args) => logger?.Log(LogLevel.Warning, eventId, args.Prepend(origin, filePath, lineNumber, message), exception, LoggerSourceFormatter.Format);
     }
 }
