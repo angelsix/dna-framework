@@ -21,8 +21,10 @@ namespace Dna
         /// <param name="content">The content to post</param>
         /// <param name="sendType">The format to serialize the content into</param>
         /// <param name="returnType">The expected type of content to be returned from the server</param>
+        /// <param name="configureRequest">Allows caller to customize and configure the request prior to the content being written and sent</param>
+        /// <param name="bearerToken">If specified, provides the Authorization header with `bearer token-here` for things like JWT bearer tokens</param>
         /// <returns></returns>
-        public static async Task<HttpWebResponse> PostAsync(string url, object content = null, KnownContentSerializers sendType = KnownContentSerializers.Json, KnownContentSerializers returnType = KnownContentSerializers.Json)
+        public static async Task<HttpWebResponse> PostAsync(string url, object content = null, KnownContentSerializers sendType = KnownContentSerializers.Json, KnownContentSerializers returnType = KnownContentSerializers.Json, Action<HttpWebRequest> configureRequest = null, string bearerToken = null)
         {
             #region Setup
 
@@ -37,6 +39,14 @@ namespace Dna
 
             // Set the content type
             request.ContentType = sendType.ToMimeString();
+
+            // If we have a bearer token...
+            if (bearerToken != null)
+                // Add bearer token to header
+                request.Headers.Add(HttpRequestHeader.Authorization, $"Bearer {bearerToken}");
+
+            // Any custom work
+            configureRequest?.Invoke(request);
 
             #endregion
 
@@ -101,11 +111,13 @@ namespace Dna
         /// <param name="content">The content to post</param>
         /// <param name="sendType">The format to serialize the content into</param>
         /// <param name="returnType">The expected type of content to be returned from the server</param>
+        /// <param name="configureRequest">Allows caller to customize and configure the request prior to the content being written and sent</param>
+        /// <param name="bearerToken">If specified, provides the Authorization header with `bearer token-here` for things like JWT bearer tokens</param>
         /// <returns></returns>
-        public static async Task<WebRequestResult<TResponse>> PostAsync<TResponse>(string url, object content = null, KnownContentSerializers sendType = KnownContentSerializers.Json, KnownContentSerializers returnType = KnownContentSerializers.Json)
+        public static async Task<WebRequestResult<TResponse>> PostAsync<TResponse>(string url, object content = null, KnownContentSerializers sendType = KnownContentSerializers.Json, KnownContentSerializers returnType = KnownContentSerializers.Json, Action<HttpWebRequest> configureRequest = null, string bearerToken = null)
         {
             // Make the standard Post call first
-            var serverResponse = await PostAsync(url, content, sendType, returnType);
+            var serverResponse = await PostAsync(url, content, sendType, returnType, configureRequest, bearerToken);
 
             // Create a result
             var result = serverResponse.CreateWebRequestResult<TResponse>();
