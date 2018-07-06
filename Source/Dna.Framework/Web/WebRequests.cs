@@ -100,8 +100,18 @@ namespace Dna
 
             #endregion
 
-            // Return the raw server response
-            return await request.GetResponseAsync() as HttpWebResponse;
+            // Wrap call...
+            try
+            {
+                // Return the raw server response
+                return await request.GetResponseAsync() as HttpWebResponse;
+            }
+            // Catch Web Exceptions (which throw for things like 401)
+            catch (WebException ex)
+            {
+                // And instead, return the response and let the caller decide what to do with the StatusCode
+                return ex.Response as HttpWebResponse;
+            }
         }
 
         /// <summary>
@@ -126,8 +136,7 @@ namespace Dna
             if (result.StatusCode != HttpStatusCode.OK)
             {
                 // Call failed
-                // TODO: Localize string
-                result.ErrorMessage = $"Server returned unsuccessful status code. {serverResponse.StatusCode} {serverResponse.StatusDescription}";
+                // Return no error message so the client can display its own based on the status code
 
                 // Done
                 return result;
