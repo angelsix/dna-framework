@@ -109,8 +109,14 @@ namespace Dna
             // Catch Web Exceptions (which throw for things like 401)
             catch (WebException ex)
             {
-                // And instead, return the response and let the caller decide what to do with the StatusCode
-                return ex.Response as HttpWebResponse;
+                // If we got a response...
+                if (ex.Response is HttpWebResponse httpResponse)
+                    // Return the response
+                    return httpResponse;
+
+                // Otherwise, we don't have any information to be able to return
+                // So re-throw
+                throw;
             }
         }
 
@@ -126,8 +132,23 @@ namespace Dna
         /// <returns></returns>
         public static async Task<WebRequestResult<TResponse>> PostAsync<TResponse>(string url, object content = null, KnownContentSerializers sendType = KnownContentSerializers.Json, KnownContentSerializers returnType = KnownContentSerializers.Json, Action<HttpWebRequest> configureRequest = null, string bearerToken = null)
         {
-            // Make the standard Post call first
-            var serverResponse = await PostAsync(url, content, sendType, returnType, configureRequest, bearerToken);
+            // Create server response holder
+            var serverResponse = default(HttpWebResponse);
+
+            try
+            {
+                // Make the standard Post call first
+                serverResponse = await PostAsync(url, content, sendType, returnType, configureRequest, bearerToken);
+            }
+            catch (Exception ex)
+            {
+                // If we got unexpected error, return that
+                return new WebRequestResult<TResponse>
+                {
+                    // Include exception message
+                    ErrorMessage = ex.Message
+                };
+            }
 
             // Create a result
             var result = serverResponse.CreateWebRequestResult<TResponse>();
