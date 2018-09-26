@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace Dna
 {
@@ -32,7 +33,7 @@ namespace Dna
                 // Add file based configuration
 
                 // Set base path for Json files as the startup location of the application
-                configurationBuilder.SetBasePath(Directory.GetCurrentDirectory());
+                configurationBuilder.SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
                 // Add application settings json files
                 configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);

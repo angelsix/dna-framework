@@ -43,6 +43,9 @@ namespace Dna
                 // Get a stream reader...
                 using (var streamReader = new StreamReader(responseStream))
                     // Read in the response body
+                    // NOTE: By reading to the end of the stream
+                    //       The stream will also close for us
+                    //       (which we must do to release the request)
                     result.RawServerResponse = streamReader.ReadToEnd();
             }
 
