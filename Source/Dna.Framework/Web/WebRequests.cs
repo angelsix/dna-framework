@@ -15,9 +15,58 @@ namespace Dna
     public static class WebRequests
     {
         /// <summary>
-        /// Posts a web request to an URL and returns the raw http web response
+        /// GETs a web request to an URL and returns the raw http web response
         /// </summary>
-        /// <param name="url">The URL to post to</param>
+        /// <remarks>IMPORTANT: Remember to close the returned <see cref="HttpWebResponse"/> stream once done</remarks>
+        /// <param name="url">The URL</param>
+        /// <param name="configureRequest">Allows caller to customize and configure the request prior to the request being sent</param>
+        /// <param name="bearerToken">If specified, provides the Authorization header with `bearer token-here` for things like JWT bearer tokens</param>
+        /// <returns></returns>
+        public static async Task<HttpWebResponse> GetAsync(string url, Action<HttpWebRequest> configureRequest = null, string bearerToken = null)
+        {
+            #region Setup
+
+            // Create the web request
+            var request = WebRequest.CreateHttp(url);
+
+            // Make it a GET request method
+            request.Method = HttpMethod.Get.ToString();
+
+            // If we have a bearer token...
+            if (bearerToken != null)
+                // Add bearer token to header
+                request.Headers.Add(HttpRequestHeader.Authorization, $"Bearer {bearerToken}");
+
+            // Any custom work
+            configureRequest?.Invoke(request);
+
+            #endregion
+            
+            // Wrap call...
+            try
+            {
+                // Return the raw server response
+                return await request.GetResponseAsync() as HttpWebResponse;
+            }
+            // Catch Web Exceptions (which throw for things like 401)
+            catch (WebException ex)
+            {
+                // If we got a response...
+                if (ex.Response is HttpWebResponse httpResponse)
+                    // Return the response
+                    return httpResponse;
+
+                // Otherwise, we don't have any information to be able to return
+                // So re-throw
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// POSTs a web request to an URL and returns the raw http web response
+        /// </summary>
+        /// <remarks>IMPORTANT: Remember to close the returned <see cref="HttpWebResponse"/> stream once done</remarks>
+        /// <param name="url">The URL</param>
         /// <param name="content">The content to post</param>
         /// <param name="sendType">The format to serialize the content into</param>
         /// <param name="returnType">The expected type of content to be returned from the server</param>
@@ -90,6 +139,19 @@ namespace Dna
                     // TODO: Throw error once we have Dna Framework exception types
                 }
 
+                // 
+                //  NOTE: This GetRequestStreamAsync could throw with a
+                //        SocketException (or an inner exception of SocketException)
+                //
+                //        However, we cannot return anything useful from this 
+                //        so we just let it throw out so the caller can handle
+                //        this (the other PostAsync call for example).
+                //
+                //        SocketExceptions are a good indication there is no 
+                //        Internet, or no connection or firewalls blocking 
+                //        communication.
+                //
+
                 // Get body stream...
                 using (var requestStream = await request.GetRequestStreamAsync())
                 // Create a stream writer from the body stream...
@@ -121,9 +183,9 @@ namespace Dna
         }
 
         /// <summary>
-        /// Posts a web request to an URL and returns a response of the expected data type
+        /// POSTs a web request to an URL and returns a response of the expected data type
         /// </summary>
-        /// <param name="url">The URL to post to</param>
+        /// <param name="url">The URL</param>
         /// <param name="content">The content to post</param>
         /// <param name="sendType">The format to serialize the content into</param>
         /// <param name="returnType">The expected type of content to be returned from the server</param>
