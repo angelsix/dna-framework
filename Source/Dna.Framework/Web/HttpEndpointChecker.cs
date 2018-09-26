@@ -3,7 +3,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Dna.Web
+namespace Dna
 {
     /// <summary>
     /// Continually hits up a web HTTP/HTTPS endpoint checking for a valid response.
