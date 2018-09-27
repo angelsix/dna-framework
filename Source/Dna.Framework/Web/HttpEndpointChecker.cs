@@ -82,7 +82,7 @@ namespace Dna
                         //
                         // The user is free to override this default behavior
                         //
-                        webResponse = await WebRequests.GetAsync("http://fasetto.chat");
+                        webResponse = await WebRequests.GetAsync(Endpoint);
                     }
                     catch (Exception ex)
                     {
