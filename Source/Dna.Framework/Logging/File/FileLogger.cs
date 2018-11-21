@@ -24,12 +24,17 @@ namespace Dna
         /// <summary>
         /// The category for this logger
         /// </summary>
-        protected string mCategoryName;
+        protected readonly string mCategoryName;
 
         /// <summary>
         /// The file path to write to
         /// </summary>
-        protected string mFilePath;
+        protected readonly string mFilePath;
+
+        /// <summary>
+        /// The directory the file is in
+        /// </summary>
+        protected readonly string mDirectory;
 
         /// <summary>
         /// The configuration to use
@@ -54,6 +59,7 @@ namespace Dna
             // Set members
             mCategoryName = categoryName;
             mFilePath = filePath;
+            mDirectory = Path.GetDirectoryName(filePath);
             mConfiguration = configuration;
         }
 
@@ -119,6 +125,10 @@ namespace Dna
             // Lock the file
             lock (fileLock)
             {
+                // Ensure folder
+                if (!Directory.Exists(mDirectory))
+                    Directory.CreateDirectory(mDirectory);
+
                 // Write the message to the file
                 File.AppendAllText(mFilePath, output);
             }
