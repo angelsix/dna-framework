@@ -15,9 +15,25 @@ namespace Dna
         public LogLevel LogLevel { get; set; } = LogLevel.Trace;
 
         /// <summary>
+        /// Whether the log should include the level for each message
+        /// (and then you can easily scan logs for, say ,ERR for errors
+        /// </summary>
+        public bool IncludeLoglevel { get; set; } = false;
+
+        /// <summary>
+        /// Whether the log should include the thread ID which the message comes from
+        /// </summary>
+        public bool IncludeThreadId { get; set; } = false;
+
+        /// <summary>
         /// Whether to log the time as part of the message
         /// </summary>
         public bool LogTime { get; set; } = true;
+
+        /// <summary>
+        /// The format string used for logging the time (if LogTime is true)
+        /// </summary>
+        public string TimeFormat { get; set; } = "yyyy-MM-dd hh:mm:ss";
 
         #endregion
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Text;
 using Microsoft.Extensions.Logging;
 
 namespace Dna
@@ -104,7 +105,7 @@ namespace Dna
                 return;
 
             // Get current time
-            var currentTime = DateTimeOffset.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            var currentTime = DateTimeOffset.Now.ToString(mConfiguration.TimeFormat);
 
             // Prepend the time to the log if desired
             var timeLogString = mConfiguration.LogTime ? $"[{currentTime}] " : "";
@@ -112,8 +113,19 @@ namespace Dna
             // Get the formatted message string
             var message = formatter(state, exception);
 
-            // Write the message
-            var output = $"{timeLogString}{message}{Environment.NewLine}";
+            var messageBuilder = new StringBuilder();
+
+            // Build the message
+            messageBuilder.Append(timeLogString);
+            AppendCurrentThreadId(messageBuilder);
+            AppendLogLevelMnemonic(messageBuilder, logLevel);
+            messageBuilder.AppendLine(message);
+
+            if (exception != null)
+            {
+                // exception message
+                messageBuilder.AppendLine(exception.ToString());
+            }
 
             // Normalize path
             // TODO: Make use of configuration base path
@@ -125,13 +137,39 @@ namespace Dna
             // Lock the file
             lock (fileLock)
             {
-                // Ensure folder
-                if (!Directory.Exists(mDirectory))
-                    Directory.CreateDirectory(mDirectory);
+                EnsureTargetDirectoryExists();
 
                 // Write the message to the file
-                File.AppendAllText(mFilePath, output);
+                File.AppendAllText(mFilePath, messageBuilder.ToString());
             }
+        }
+
+        /// <summary>
+        /// appends the string representation of the specified logLevel
+        /// to the specified messageBuilder
+        /// </summary>
+        /// <param name="messageBuilder"></param>
+        /// <param name="logLevel"></param>
+        private void AppendLogLevelMnemonic(StringBuilder messageBuilder, LogLevel logLevel)
+        {
+            if (mConfiguration.IncludeLoglevel)
+            {
+                LogLevelConverter.Append(messageBuilder, logLevel);
+            }
+        }
+
+        private void AppendCurrentThreadId(StringBuilder messageBuilder)
+        {
+            if (mConfiguration.IncludeThreadId)
+            {
+                messageBuilder.Append(System.Threading.Thread.CurrentThread.ManagedThreadId);
+            }
+        }
+
+        private void EnsureTargetDirectoryExists()
+        {
+            if (!Directory.Exists(mDirectory))
+                Directory.CreateDirectory(mDirectory);
         }
     }
 }

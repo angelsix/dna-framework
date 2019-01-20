@@ -27,9 +27,11 @@ namespace Dna
 
             // If we have an exception ...
             if (exception != null)
+            {
                 // New line between message and exception
                 exceptionMessage = Environment.NewLine + exception;
-
+                exceptionMessage += Environment.NewLine + exception.StackTrace;
+            }
             // Format the message string
             return $"{message} [{Path.GetFileName(filePath)} > {origin}() > Line {lineNumber}]{exceptionMessage}";
         }
