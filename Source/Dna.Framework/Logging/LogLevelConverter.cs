@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Dna
 {
@@ -25,10 +24,21 @@ namespace Dna
             };
         }
 
-        public static void Append(StringBuilder messageBuilder, LogLevel logLevel)
+        /// <summary>
+        /// Converts a logLevel to constant-length string representation.
+        /// </summary>
+        /// <param name="logLevel"></param>
+        /// <returns>
+        /// Returns mnemonic value corresponding to the value of logLevel.
+        /// Returns 'UNKNO ' for an unsupported value.
+        /// </returns>
+        public static string Convert(LogLevel logLevel)
         {
-            messageBuilder.Append(Levels[logLevel]);
+            if (Levels.TryGetValue(logLevel, out string value))
+            {
+                return value;
+            }
+            return "UNKNO ";
         }
-
     }
 }

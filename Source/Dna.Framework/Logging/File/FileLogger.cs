@@ -156,7 +156,7 @@ namespace Dna
         {
             if (mConfiguration.IncludeLoglevel)
             {
-                LogLevelConverter.Append(messageBuilder, logLevel);
+                messageBuilder.Append(" " + LogLevelConverter.Convert(logLevel));
             }
         }
 
@@ -164,7 +164,7 @@ namespace Dna
         {
             if (mConfiguration.IncludeThreadId)
             {
-                messageBuilder.Append(System.Threading.Thread.CurrentThread.ManagedThreadId);
+                messageBuilder.AppendFormat("{0,3}", System.Threading.Thread.CurrentThread.ManagedThreadId);
             }
         }
 
