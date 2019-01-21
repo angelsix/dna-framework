@@ -35,6 +35,13 @@ namespace Dna
         /// </summary>
         public string TimeFormat { get; set; } = "yyyy-MM-dd hh:mm:ss";
 
+        /// <summary>
+        /// Configuration options for rotating log files.
+        /// These are required to prevent consuming unlimited storage space.
+        /// Default: rotation disabled.
+        /// </summary>
+        public LogRotationConfiguration RotationConfig { get; set; } = new LogRotationConfiguration();
+
         #endregion
     }
 }

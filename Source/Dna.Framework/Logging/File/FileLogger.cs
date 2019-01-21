@@ -141,6 +141,8 @@ namespace Dna
 
                 // Write the message to the file
                 File.AppendAllText(mFilePath, messageBuilder.ToString());
+
+                RotateLogAsNeeded();
             }
         }
 
@@ -170,6 +172,19 @@ namespace Dna
         {
             if (!Directory.Exists(mDirectory))
                 Directory.CreateDirectory(mDirectory);
+        }
+
+        private void RotateLogAsNeeded()
+        {
+            if (mConfiguration.RotationConfig.MaxLogFileSize == LogRotationConfiguration.Unlimited)
+            {
+                return;
+            }
+            var size = new FileInfo(mFilePath).Length;
+            if (size > mConfiguration.RotationConfig.MaxLogFileSize)
+            {
+                // time to rotate
+            }
         }
     }
 }
