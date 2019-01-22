@@ -33,7 +33,7 @@ namespace Dna
         /// <summary>
         /// The format string used for logging the time (if LogTime is true)
         /// </summary>
-        public string TimeFormat { get; set; } = "yyyy-MM-dd hh:mm:ss";
+        public string TimeFormat { get; set; } = "yyyy-MM-dd HH:mm:ss";
 
         /// <summary>
         /// Configuration options for rotating log files.

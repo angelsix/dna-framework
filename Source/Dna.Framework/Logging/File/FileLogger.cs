@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.IO;
-using System.Text;
-using Microsoft.Extensions.Logging;
-
-namespace Dna
+﻿namespace Dna
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.IO;
+    using System.Text;
+    using Microsoft.Extensions.Logging;
+
     /// <summary>
     /// A logger that writes the logs to file
     /// </summary>
@@ -16,7 +16,7 @@ namespace Dna
         /// <summary>
         /// A list of file locks based on path
         /// </summary>
-        protected static ConcurrentDictionary<string, object> FileLocks = new ConcurrentDictionary<string, object>();
+        protected static ConcurrentDictionary<string, RotatingFileWriter> FileLocks = new ConcurrentDictionary<string, RotatingFileWriter>();
 
         #endregion
 
@@ -127,23 +127,27 @@ namespace Dna
                 messageBuilder.AppendLine(exception.ToString());
             }
 
-            // Normalize path
             // TODO: Make use of configuration base path
-            var normalizedPath = mFilePath.ToUpper();
-
-            // Get the file lock based on the absolute path
-            var fileLock = FileLocks.GetOrAdd(normalizedPath, path => new object());
+            var logFileWriter = GetLogWriter(mFilePath, mConfiguration);
 
             // Lock the file
-            lock (fileLock)
+            lock (logFileWriter)
             {
-                EnsureTargetDirectoryExists();
-
                 // Write the message to the file
-                File.AppendAllText(mFilePath, messageBuilder.ToString());
-
-                RotateLogAsNeeded();
+                logFileWriter.WriteLogMessage(messageBuilder.ToString());
             }
+        }
+
+        private static RotatingFileWriter GetLogWriter(string filePath, FileLoggerConfiguration config)
+        {
+            // Normalize path
+            var normalizedPath = filePath.ToUpper();
+
+            // Get the file lock based on the absolute path
+            return FileLocks.GetOrAdd(
+                normalizedPath, 
+                path => new RotatingFileWriter(filePath, config.RotationConfig)
+                );
         }
 
         /// <summary>
@@ -165,25 +169,6 @@ namespace Dna
             if (mConfiguration.IncludeThreadId)
             {
                 messageBuilder.AppendFormat("{0,3}", System.Threading.Thread.CurrentThread.ManagedThreadId);
-            }
-        }
-
-        private void EnsureTargetDirectoryExists()
-        {
-            if (!Directory.Exists(mDirectory))
-                Directory.CreateDirectory(mDirectory);
-        }
-
-        private void RotateLogAsNeeded()
-        {
-            if (mConfiguration.RotationConfig.MaxLogFileSize == LogRotationConfiguration.Unlimited)
-            {
-                return;
-            }
-            var size = new FileInfo(mFilePath).Length;
-            if (size > mConfiguration.RotationConfig.MaxLogFileSize)
-            {
-                // time to rotate
             }
         }
     }
