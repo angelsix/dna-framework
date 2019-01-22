@@ -1,33 +1,40 @@
 ﻿namespace Dna
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
 
-    public class RotatingFileWriter
+    /// <summary>
+    /// writes log mesages to the specified file,
+    /// rotating as needed, according to the specified rotation options
+    /// </summary>
+    internal sealed class RotatingFileWriter : IFileLogWriter
     {
         private readonly LogRotationConfiguration _rotationConfig;
         private readonly string _logFilePath;
+        private readonly bool _autoFlush;
         private StreamWriter _logStream;
 
         /// <summary>
         /// Creates a rotating log writer with the specified configuration
         /// </summary>
         /// <param name="logFilePath"></param>
+        /// <param name="autoFlush">perform a flush after writing each message</param>
         /// <param name="config"></param>
-        public RotatingFileWriter(string logFilePath, LogRotationConfiguration config)
+        public RotatingFileWriter(string logFilePath, bool autoFlush, LogRotationConfiguration config)
         {
             _logFilePath = logFilePath ?? throw new ArgumentNullException(nameof(logFilePath));
             _rotationConfig = config ?? throw new ArgumentNullException(nameof(config));
+            // flush after each call?
+            _autoFlush = autoFlush;
 
             var directory = Path.GetDirectoryName(logFilePath);
 
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
 
-            _logStream = OpenFileStream(_logFilePath);
+            _logStream = OpenFileStream(_logFilePath, _autoFlush);
         }
 
 
@@ -68,17 +75,19 @@
                     Console.Error.WriteLine($"Unable to rotate log file {fullFileName}: {ex.Message}");
                 }
 
-                _logStream = OpenFileStream(_logFilePath);
+                _logStream = OpenFileStream(_logFilePath, _autoFlush);
 
                 // leave at most mConfiguration.RotationConfig.MaxLogFilesCount files
                 RemoveExtraLogFiles(fullPath, fileName);
             }
         }
 
-        private static StreamWriter OpenFileStream(string normalizedPath)
+        private static StreamWriter OpenFileStream(string normalizedPath, bool autoFlush)
         {
             var fileExists = File.Exists(normalizedPath);
-            return new StreamWriter(normalizedPath, fileExists, Encoding.UTF8, 64 * 1024);
+            var writer = new StreamWriter(normalizedPath, fileExists, Encoding.UTF8, 64 * 1024);
+            writer.AutoFlush = autoFlush;
+            return writer;
         }
 
         /// <summary>

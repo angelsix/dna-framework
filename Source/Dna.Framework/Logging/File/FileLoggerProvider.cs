@@ -6,7 +6,7 @@ namespace Dna
     /// <summary>
     /// Provides the ability to log to file
     /// </summary>
-    public class FileLoggerProvider : ILoggerProvider
+    internal class FileLoggerProvider : ILoggerProvider
     {
         #region Protected Members
 

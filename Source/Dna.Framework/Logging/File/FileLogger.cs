@@ -9,14 +9,14 @@
     /// <summary>
     /// A logger that writes the logs to file
     /// </summary>
-    public class FileLogger : ILogger
+    internal class FileLogger : ILogger
     {
         #region Static Properties
 
         /// <summary>
         /// A list of file locks based on path
         /// </summary>
-        protected static ConcurrentDictionary<string, RotatingFileWriter> FileLocks = new ConcurrentDictionary<string, RotatingFileWriter>();
+        protected static ConcurrentDictionary<string, IFileLogWriter> FileLocks = new ConcurrentDictionary<string, IFileLogWriter>();
 
         #endregion
 
@@ -138,7 +138,7 @@
             }
         }
 
-        private static RotatingFileWriter GetLogWriter(string filePath, FileLoggerConfiguration config)
+        private static IFileLogWriter GetLogWriter(string filePath, FileLoggerConfiguration config)
         {
             // Normalize path
             var normalizedPath = filePath.ToUpper();
@@ -146,8 +146,18 @@
             // Get the file lock based on the absolute path
             return FileLocks.GetOrAdd(
                 normalizedPath, 
-                path => new RotatingFileWriter(filePath, config.RotationConfig)
-                );
+                path =>
+                {
+                    if (config.RotationConfig.MaxLogFileSize != LogRotationConfiguration.Unlimited)
+                    {
+                        return new RotatingFileWriter(filePath, true, config.RotationConfig);
+                    }
+                    else
+                    {
+                        return new SimpleFileWriter(filePath);
+                    }
+                }
+            );
         }
 
         /// <summary>
