@@ -129,8 +129,25 @@ namespace Dna
                 if (!Directory.Exists(mDirectory))
                     Directory.CreateDirectory(mDirectory);
 
-                // Write the message to the file
-                File.AppendAllText(mFilePath, output);
+                // If log at top is set to true...
+                if (mConfiguration.LogAtTop)
+                {
+                    // Open the file
+                    var fileStream = File.Open(mFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+                    // Set the current position to 0
+                    fileStream.Seek(0, SeekOrigin.Begin);
+
+                    // Initialize new stream writer
+                    var streamWriter = new StreamWriter(fileStream);
+
+                    // Write the message to the file
+                    streamWriter.WriteAsync(output);
+                }
+                // Else...
+                else
+                    // Write the message to the file
+                    File.AppendAllText(mFilePath, output);
             }
         }
     }

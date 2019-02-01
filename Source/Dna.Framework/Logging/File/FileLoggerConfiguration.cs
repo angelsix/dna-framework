@@ -19,6 +19,11 @@ namespace Dna
         /// </summary>
         public bool LogTime { get; set; } = true;
 
+        /// <summary>
+        /// Whether to display latest logs at the top of the file
+        /// </summary>
+        public bool LogAtTop { get; set; } = true;
+
         #endregion
     }
 }
