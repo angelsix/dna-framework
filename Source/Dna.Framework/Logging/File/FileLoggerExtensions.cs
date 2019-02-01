@@ -32,14 +32,15 @@ namespace Dna
         /// </summary>
         /// <param name="construction">The construction</param>
         /// <param name="logPath">The path of the file to log to</param>
+        /// <param name="logTop">Whether to display latest logs at the top of the file</param>
         /// <returns></returns>
-        public static FrameworkConstruction AddFileLogger(this FrameworkConstruction construction, string logPath = "log.txt")
+        public static FrameworkConstruction AddFileLogger(this FrameworkConstruction construction, string logPath = "log.txt", bool logTop = true)
         {
             // Make use of AddLogging extension
             construction.Services.AddLogging(options =>
             {
                 // Add file logger
-                options.AddFile(logPath);
+                options.AddFile(logPath, new FileLoggerConfiguration { LogAtTop = logTop });
             });
             
             // Chain the construction
