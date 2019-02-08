@@ -17,6 +17,11 @@ namespace Dna
         /// </summary>
         protected static ConcurrentDictionary<string, object> FileLocks = new ConcurrentDictionary<string, object>();
 
+        /// <summary>
+        /// The lock to lock the list of locks
+        /// </summary>
+        protected static object FileLockLock = new object();
+
         #endregion
 
         #region Protected Members
@@ -119,8 +124,14 @@ namespace Dna
             // TODO: Make use of configuration base path
             var normalizedPath = mFilePath.ToUpper();
 
-            // Get the file lock based on the absolute path
-            var fileLock = FileLocks.GetOrAdd(normalizedPath, path => new object());
+            var fileLock = default(object);
+
+            // Double safety even though the FileLocks should be thread safe
+            lock (FileLockLock)
+            {
+                // Get the file lock based on the absolute path
+                fileLock = FileLocks.GetOrAdd(normalizedPath, path => new object());
+            }
 
             // Lock the file
             lock (fileLock)
@@ -129,25 +140,17 @@ namespace Dna
                 if (!Directory.Exists(mDirectory))
                     Directory.CreateDirectory(mDirectory);
 
-                // If log at top is set to true...
-                if (mConfiguration.LogAtTop)
+                // Open the file
+                using (var fileStream = new StreamWriter(File.Open(mFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)))
                 {
-                    // Open the file
-                    var fileStream = File.Open(mFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    // Go to end
+                    fileStream.BaseStream.Seek(0, SeekOrigin.End);
 
-                    // Set the current position to 0
-                    fileStream.Seek(0, SeekOrigin.Begin);
-
-                    // Initialize new stream writer
-                    var streamWriter = new StreamWriter(fileStream);
+                    // NOTE: Ignore logToTop in configuration as not efficient for files on OS
 
                     // Write the message to the file
-                    streamWriter.WriteAsync(output);
+                    fileStream.Write(output);
                 }
-                // Else...
-                else
-                    // Write the message to the file
-                    File.AppendAllText(mFilePath, output);
             }
         }
     }
