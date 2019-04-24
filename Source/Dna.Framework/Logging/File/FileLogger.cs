@@ -111,6 +111,9 @@ namespace Dna
             // Get current time
             var currentTime = DateTimeOffset.Now.ToString("yyyy-MM-dd hh:mm:ss");
 
+            // Prepend log level
+            var logLevelString = mConfiguration.OutputLogLevel ? $"{logLevel.ToString().ToUpper()}: " : "";
+
             // Prepend the time to the log if desired
             var timeLogString = mConfiguration.LogTime ? $"[{currentTime}] " : "";
 
@@ -118,7 +121,7 @@ namespace Dna
             var message = formatter(state, exception);
 
             // Write the message
-            var output = $"{timeLogString}{message}{Environment.NewLine}";
+            var output = $"{logLevelString}{timeLogString}{message}{Environment.NewLine}";
 
             // Normalize path
             // TODO: Make use of configuration base path

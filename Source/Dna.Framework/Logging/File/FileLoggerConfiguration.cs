@@ -24,6 +24,11 @@ namespace Dna
         /// </summary>
         public bool LogAtTop { get; set; } = true;
 
+        /// <summary>
+        /// Indicates if the log level should be output as part of the log message
+        /// </summary>
+        public bool OutputLogLevel { get; set; } = true;
+
         #endregion
     }
 }
