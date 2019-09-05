@@ -23,6 +23,11 @@ namespace Dna
         /// </summary>
         protected Action<bool> mStateChangedCallback;
 
+        /// <summary>
+        /// Indicates if there has been a call to the endpoint yet or if this is the first call
+        /// </summary>
+        protected bool mFirstCallMade;
+
         #endregion
 
         #region Public Properties
@@ -101,7 +106,7 @@ namespace Dna
                     logger?.LogTraceSource($"HttpEndpointChecker {endpoint} { (responsive ? "is" : "is not") } responsive");
 
                     // If the state has changed...
-                    if (responsive != Responsive)
+                    if (!mFirstCallMade || responsive != Responsive)
                     {
                         // Set new value
                         Responsive = responsive;
@@ -109,6 +114,9 @@ namespace Dna
                         // Inform listener
                         mStateChangedCallback?.Invoke(responsive);
                     }
+
+                    // No longer the first call
+                    mFirstCallMade = true;
 
                     // If we are not disposing...
                     if (!mDisposing)
