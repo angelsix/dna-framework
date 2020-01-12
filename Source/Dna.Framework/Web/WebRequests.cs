@@ -124,14 +124,13 @@ namespace Dna
                     var xmlSerializer = new XmlSerializer(content.GetType());
 
                     // Create a string writer to receive the serialized string
-                    using (var stringWriter = new StringWriter())
-                    {
-                        // Serialize the object to a string
-                        xmlSerializer.Serialize(stringWriter, content);
+                    using var stringWriter = new StringWriter();
 
-                        // Extract the string from the writer
-                        contentString = stringWriter.ToString();
-                    }
+                    // Serialize the object to a string
+                    xmlSerializer.Serialize(stringWriter, content);
+
+                    // Extract the string from the writer
+                    contentString = stringWriter.ToString();
                 }
                 // Currently unknown
                 else
@@ -153,11 +152,13 @@ namespace Dna
                 //
 
                 // Get body stream...
-                using (var requestStream = await request.GetRequestStreamAsync())
+                using var requestStream = await request.GetRequestStreamAsync();
+
                 // Create a stream writer from the body stream...
-                using (var streamWriter = new StreamWriter(requestStream))
-                    // Write content to HTTP body stream
-                    await streamWriter.WriteAsync(contentString);
+                using var streamWriter = new StreamWriter(requestStream);
+
+                // Write content to HTTP body stream
+                await streamWriter.WriteAsync(contentString);
             }
 
             #endregion
@@ -256,9 +257,10 @@ namespace Dna
                     var xmlSerializer = new XmlSerializer(typeof(TResponse));
 
                     // Create a memory stream for the raw string data
-                    using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(result.RawServerResponse)))
-                        // Deserialize XML string
-                        result.ServerResponse = (TResponse)xmlSerializer.Deserialize(memoryStream);
+                    using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(result.RawServerResponse));
+
+                    // Deserialize XML string
+                    result.ServerResponse = (TResponse)xmlSerializer.Deserialize(memoryStream);
                 }
                 // Unknown
                 else
@@ -270,7 +272,7 @@ namespace Dna
                     return result;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // If deserialize failed then set error message
                 result.ErrorMessage = "Failed to deserialize server response to the expected type";
