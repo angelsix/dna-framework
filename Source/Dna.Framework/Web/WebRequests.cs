@@ -126,6 +126,7 @@ namespace Dna
                     // Create a string writer to receive the serialized string
                     using (var stringWriter = new StringWriter())
                     {
+
                         // Serialize the object to a string
                         xmlSerializer.Serialize(stringWriter, content);
 
@@ -270,7 +271,7 @@ namespace Dna
                     return result;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // If deserialize failed then set error message
                 result.ErrorMessage = "Failed to deserialize server response to the expected type";
