@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -11,9 +11,9 @@
     <PackageTags>dna framework angelsix luke malpass web core cross platform</PackageTags>
     <PackageReleaseNotes>A cross-platform base framework useful for all projects that use .Net Core</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.7.16</Version>
-    <AssemblyVersion>1.0.7.16</AssemblyVersion>
-    <FileVersion>1.0.7.16</FileVersion>
+    <Version>1.0.7.17</Version>
+    <AssemblyVersion>1.0.7.17</AssemblyVersion>
+    <FileVersion>1.0.7.17</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
