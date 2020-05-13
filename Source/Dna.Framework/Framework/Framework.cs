@@ -38,7 +38,7 @@ namespace Dna
         /// <summary>
         /// The dependency injection service provider
         /// </summary>
-        public static IServiceProvider Provider => Construction.Provider;
+        public static IServiceProvider Provider => Construction?.Provider;
 
         #endregion
 
