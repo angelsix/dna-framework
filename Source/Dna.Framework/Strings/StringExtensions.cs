@@ -20,7 +20,7 @@
         /// </summary>
         /// <param name="content">The string</param>
         /// <returns></returns>
-        public static bool IsNullOWhiteSpace(this string content)
+        public static bool IsNullOrWhiteSpace(this string content)
         {
             return string.IsNullOrWhiteSpace(content);
         }
